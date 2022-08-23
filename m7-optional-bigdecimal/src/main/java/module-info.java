@@ -1,4 +1,4 @@
-module mouduleJava8 {
-    requires moduleJava9;
+module moudule7 {
+    requires module8;
 
 }
