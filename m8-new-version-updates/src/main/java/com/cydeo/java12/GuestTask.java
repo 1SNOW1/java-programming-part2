@@ -10,21 +10,11 @@ public class GuestTask {
 
         var result =
                 Stream.of(
-                                // Guest(String name, boolean participating, Integer participantsNumber)
                                 new Guest("Marco", true, 3),
                                 new Guest("David", false, 2),
-                                new Guest("Roger",true, 6))
-                        .collect(Collectors.teeing(
-                                // first collector, we select only who confirmed the participation
-                                Collectors.filtering(Guest::isParticipating,
-                                        // whe want to collect only the first name in a list
-                                        Collectors.mapping(o -> o.getName(), Collectors.toList())),
-                                // second collector, we want the total number of participants
-                                Collectors.summingInt(Guest::getParticipantsNumber),
-                                // we merge the collectors in a new Object,
-                                // the values are implicitly passed
-                                EventParticipation::new
-                        ));
+                                new Guest("Roger", true, 6))
+                        .collect(Collectors.teeing(Collectors.filtering(Guest::isParticipating, Collectors.mapping(Guest::getName, Collectors.toList())),
+                                Collectors.filtering(Guest::isParticipating, Collectors.summingInt(Guest::getParticipantsNumber)), EventParticipation::new));
 
         System.out.println(result);
 
